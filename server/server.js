@@ -1,6 +1,7 @@
 const path = require("path");
 const http = require("http");
 const socketIO = require("socket.io");
+const {generateMessage,generatelocationMessage} = require("./utils/message");
 const publicPath = path.join(__dirname, '/../public');
 const port = process.env.PORT || 3000;
 const express = require("express");
@@ -17,36 +18,25 @@ app.use(express.static(publicPath));
 
 io.on('connection', function(socket) {
   console.log(" A new user just Connected");
-  socket.emit('newMessage',{
-    from:"Admin",
-    text:"Welcome To Teja's Chat App",
-    createDat:new Date().getTime()
-  })
 
-  socket.broadcast.emit('newMessage',{
-    from:"Admin",
-    text:"A New User Joined",
-    createDat:new Date().getTime()
-  })
-  socket.emit("newMessage", {
-    from: 'Lavanya',
-    text: "hey it is my server chat"
-  })
 
-  socket.on('createMessage', function(message) {
+  socket.emit('newMessage',generateMessage("Admin","Welcome to Teja's Chat Box"));
+
+
+  socket.broadcast.emit('newMessage',generateMessage("Admin","A New User Joined"));
+
+
+
+  socket.on('createMessage', function(message,callback) {
     console.log('createMessage', message);
 
-       io.emit("newMessage",{
-         from:message.from,
-        text:message.text,
-        createDat:new Date().getTime()
-       })
-
-
-
+       io.emit("newMessage",generateMessage(message.from,message.text));
+       callback("This piece of text is from the Server");
     });
 
-
+    socket.on('createLocationMessage',function(coords){
+      io.emit('newLocationMessage',generatelocationMessage("Admin",coords.lat,coords. lng))
+    })
 
 
   socket.on('disconnect', function() {

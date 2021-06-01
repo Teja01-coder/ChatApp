@@ -10,5 +10,59 @@ socket.on("disconnect",function(){
 });
 
 socket.on("newMessage",function(message){
+
   console.log("newMessage",message);
+
+let li = document.createElement("li");
+  li.innerText=`${message.from}:${message.text}`
+
+  document.querySelector('body').appendChild(li);
+});
+
+
+socket.on("newLocationMessage",function(message){
+
+  console.log("newLocationMessage",message);
+
+let li = document.createElement("li");
+let a=document.createElement("a");
+  a.setAttribute('target',"_blank");
+  a.setAttribute('href',message.url);
+  a.innerText=('My Current Location');
+  li.appendChild(a);
+  document.querySelector('body').appendChild(li);
+});
+
+
+// socket.emit("createMessage",{
+//   from:"lavanya",
+//   text:"hey !"
+//
+// }, function(message){
+//   console.log("got the message :", message);
+// });
+
+document.querySelector("#submit-btn").addEventListener('click',function(e){
+  e.preventDefault();
+  socket.emit("createMessage",{
+    from:"User",
+    text:document.querySelector('input[name="message"]').value
+  },function(){
+
+
+  });
+});
+
+document.querySelector("#send-location").addEventListener('click',function(e){
+  if(!navigator.geolocation){
+    return alert("geolocation is not supported by your browser");
+  }
+  navigator.geolocation.getCurrentPosition(function(position){
+    socket.emit('createLocationMessage',{
+      lat:position.coords.latitude,
+      lng:position.coords.longitude
+    })
+  },function(){
+    alert("Unable TO Detect / fetch Your Location");
+  })
 });

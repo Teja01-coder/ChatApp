@@ -1,22 +1,25 @@
 {
-  "name": "mychatapp",
+  "name": "chat-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Here is my first chat app",
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
     "test": "mocha server/**/*.test.js",
-    "test-watch": "nodemon --exec \"npm test\" "
+    "test-watch": "nodemon --exec \"npm test\""
   },
-  "engine": {
-    "node": "14.16.1"
+  "engines": {
+    "node": "11.2.0"
   },
-  "author": "",
+  "author": "Sai Teja Veluru",
   "license": "ISC",
   "dependencies": {
-    "expect": "^27.0.2",
-    "express": "^4.17.1",
-    "mocha": "^8.4.0",
-    "socket.io": "^4.1.2"
+    "express": "^4.16.4",
+    "moment": "^2.23.0",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "expect": "^23.6.0",
+    "mocha": "^5.2.0"
   }
 }
